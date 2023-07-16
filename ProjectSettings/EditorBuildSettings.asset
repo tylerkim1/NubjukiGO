@@ -8,8 +8,23 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Mapbox/Examples/0_PrefabScenes/Location-basedGame.unity
     guid: 42f6aa7ce7a604f16ade319663f46ceb
+  - enabled: 0
+    path: Assets/Scenes/AR.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Login.unity
+    guid: 6d80e294f141c8d488f2e4bf373762c9
+  - enabled: 1
+    path: Assets/Scenes/Home.unity
+    guid: 8f104d0a9f259bd4fa5ce9db4a538fbc
+  - enabled: 1
+    path: Assets/Scenes/MyPetList.unity
+    guid: 6d0583559b7dec644b32e5ace356f5ea
+  - enabled: 1
+    path: Assets/Scenes/ThrowBall.unity
+    guid: ab3ac7a44a154c246911185f4828e039
   m_configObjects:
-    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 4afd0d787466648ea80ab50b14529925, type: 2}
-    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 744633109ebb84a34870daeee249267c, type: 2}
-    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 71f5b4326b6c04f8888c1028afc1b1be, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5434c47e3988c48a1a2742c2703e9346, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 0ac917fd078a4ba4dbe6cb71b0103e9f, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 01e7cde98dbd849459bd13d228438eaf, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 3e2441d92df37fc4c94ce20313726d64, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2aace8dcc0bc3f041a024c31ee375759, type: 2}
