@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "319589117169",
+    "project_id": "nupzukigo",
+    "storage_bucket": "nupzukigo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319589117169:android:50431c4740dd9f28338d50",
+        "android_client_info": {
+          "package_name": "com.Madcamp.Myproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319589117169-1ec3g6mu0pr7po4jv76dbj92tibq22lv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRYKMSzTxaEPdOBS44PpT4NiaxOIBxsO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319589117169-1ec3g6mu0pr7po4jv76dbj92tibq22lv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "319589117169-vbjaj5nmel8sh2m1geje8971luu2msle.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Madcamp.Myproject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
