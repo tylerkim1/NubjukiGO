@@ -17,8 +17,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MyPetList.unity
     guid: 6d0583559b7dec644b32e5ace356f5ea
+  - enabled: 1
+    path: Assets/Scenes/ThrowBall.unity
+    guid: ab3ac7a44a154c246911185f4828e039
   m_configObjects:
-    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 308f1f4d0b0832449a23a39bbebc5d5f, type: 2}
-    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 804e9586800aff54c8acd42b2d36da86, type: 2}
-    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: a3054f19fc687b449b3b36f1aaf5f2b5, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: be1406ccb76c2f64daaa9dac4c302827, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 0ac917fd078a4ba4dbe6cb71b0103e9f, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 01e7cde98dbd849459bd13d228438eaf, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 3e2441d92df37fc4c94ce20313726d64, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2aace8dcc0bc3f041a024c31ee375759, type: 2}
