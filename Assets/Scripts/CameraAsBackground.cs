@@ -10,27 +10,26 @@ public class CameraAsBackground : MonoBehaviour
     private AspectRatioFitter arf;
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {   
-        arf = GetComponent<AspectRatioFitter>();
+        yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+        if (Application.HasUserAuthorization(UserAuthorization.WebCam)) {
+            // Do your stuff
+            arf = GetComponent<AspectRatioFitter>();
+            image = GetComponent<RawImage>();
+            if (image == null) {
+                Debug.LogError("RawImage component is not found");
+                yield break;
+            }
 
-
-        image = GetComponent<RawImage>();
-        if (image == null)
-        {
-            Debug.LogError("RawImage component is not found");
-            return;
-        }
-
-        if(WebCamTexture.devices.Length > 0)
-        {
-            cam = new WebCamTexture(Screen.width, Screen.height);
-            image.texture = cam;
-            cam.Play();
-        }
-        else
-        {
-            Debug.Log("No webcam detected");
+            if(WebCamTexture.devices.Length > 0) {
+                cam = new WebCamTexture(Screen.width, Screen.height);
+                image.texture = cam;
+                cam.Play();
+            } else Debug.Log("No webcam detected");
+        } else {
+            // Exit or show a dialog that the webcam is needed
+            Debug.Log("No Permission");
         }
     }
 

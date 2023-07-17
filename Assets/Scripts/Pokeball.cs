@@ -27,7 +27,7 @@ public class Pokeball : MonoBehaviour {
         if (thrown)
             return;
  
-        if(Input.touchCount == 1) {
+        /* if(Input.touchCount == 1) {
             Touch touch = Input.GetTouch(0);
             
             if (touch.phase == TouchPhase.Began) {
@@ -50,6 +50,28 @@ public class Pokeball : MonoBehaviour {
 
             lastMouseX = touch.position.x;
             lastMouseY = touch.position.y;
+        } */
+
+        
+        // Detect if it is touch or mouse click
+        bool isTouchDevice = Input.touchCount > 0;
+
+        // Use touch for mobile, mouse click for editor
+        if(isTouchDevice) {
+            Touch touch = Input.GetTouch(0);
+
+            ProcessTouch(touch.position, touch.phase);
+        }
+        else {
+            if(Input.GetMouseButtonDown(0)) {
+                ProcessTouch(Input.mousePosition, TouchPhase.Began);
+            }
+            if(Input.GetMouseButtonUp(0)) {
+                ProcessTouch(Input.mousePosition, TouchPhase.Ended);
+            }
+            if(Input.GetMouseButton(0)) {
+                ProcessTouch(Input.mousePosition, TouchPhase.Moved);
+            }
         }
     }
  
@@ -68,12 +90,48 @@ public class Pokeball : MonoBehaviour {
     }
  
     void OnTouch() {
-        Vector3 mousePos = Input.GetTouch (0).position;
+        /* Vector3 mousePos = Input.GetTouch (0).position;
         mousePos.z = cam.nearClipPlane * 7.5f;
  
-        newPosition = cam.ScreenToWorldPoint (mousePos);
+        newPosition = cam.ScreenToWorldPoint (mousePos); */
+
+        Vector3 position;
+
+        // Detect if it is touch or mouse click
+        bool isTouchDevice = Input.touchCount > 0;
+
+        if (isTouchDevice) {
+            position = Input.GetTouch(0).position;
+        } else {
+            position = Input.mousePosition;
+        }
+        
+        position.z = cam.nearClipPlane * 7.5f;
  
         transform.localPosition = Vector3.Lerp (transform.localPosition, newPosition, 50f * Time.deltaTime);
+    }
+
+    void ProcessTouch(Vector2 position, TouchPhase phase) {
+        if (phase == TouchPhase.Began) {
+            Ray ray = cam.ScreenPointToRay (position);
+            RaycastHit hit;
+
+            if (Physics.Raycast (ray, out hit, 100f)) {
+                if (hit.transform == transform) {
+                    holding = true;
+                    transform.SetParent (null);
+                }
+            }
+        } else if (phase == TouchPhase.Ended && holding) {
+            if (lastMouseY < position.y) {
+                ThrowBall (position);
+            }
+            holding = false;
+            thrown = true;
+        }
+
+        lastMouseX = position.x;
+        lastMouseY = position.y;
     }
  
     void ThrowBall(Vector2 mousePos) {
@@ -82,8 +140,19 @@ public class Pokeball : MonoBehaviour {
         float differenceY = (mousePos.y - lastMouseY) / Screen.height * 100;
         speed = throwSpeed * Mathf.Sqrt(differenceY / Screen.height) * 120;
  
+        /* float x = (mousePos.x / Screen.width) - (lastMouseX / Screen.width);
+        x = Mathf.Abs (Input.GetTouch (0).position.x - lastMouseX) / Screen.width * 100 * x; */
+
         float x = (mousePos.x / Screen.width) - (lastMouseX / Screen.width);
-        x = Mathf.Abs (Input.GetTouch (0).position.x - lastMouseX) / Screen.width * 100 * x;
+
+        // Check if it is touch device or not
+        bool isTouchDevice = Input.touchCount > 0;
+        
+        if (isTouchDevice) {
+            x = Mathf.Abs (Input.GetTouch (0).position.x - lastMouseX) / Screen.width * 100 * x;
+        } else {
+            x = Mathf.Abs (mousePos.x - lastMouseX) / Screen.width * 100 * x;
+        }
  
         Vector3 direction = new Vector3 (x, 0f, 1f);
         direction = cam.transform.TransformDirection (direction);
