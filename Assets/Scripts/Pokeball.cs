@@ -78,7 +78,7 @@ public class Pokeball : MonoBehaviour {
 
         var getdata = JsonUtility.FromJson<Response>(json);
         petname.text = getdata.pet.name;
-        petrank.text = getdata.pet.rank.ToString();
+        petrank.text = "Lv. " + getRank(getdata.pet.rank);
         if (getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
             energy.text = "활력: 70";
@@ -96,6 +96,22 @@ public class Pokeball : MonoBehaviour {
             clean.text = "청결도: 50";
         }
         locationText.text = getdata.location.location + "에서 잡았습니다!";
+    }
+
+    private string getRank(int rank)
+    {
+        if (rank == 1)
+        {
+            return "학사";
+        }
+        else if (rank == 2)
+        {
+            return "석사";
+        }
+        else
+        {
+            return "박사";
+        }
     }
 
     public void HidePanel()
