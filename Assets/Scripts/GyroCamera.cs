@@ -56,7 +56,7 @@ public class GyroCamera : MonoBehaviour
             hitPoint.y = 0;
 
             float z = Vector3.Distance(Vector3.zero, hitPoint);
-            zoomObj.localPosition = new Vector3(0f, zoomObj.localPosition.y, Mathf.Clamp(z, 7f, 7f));
+            zoomObj.localPosition = new Vector3(0f, zoomObj.localPosition.y, Mathf.Clamp(z, 8.5f, 8.5f));
         }
 
         startY = transform.eulerAngles.y;
