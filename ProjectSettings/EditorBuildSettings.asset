@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ThrowBall.unity
     guid: ab3ac7a44a154c246911185f4828e039
+  - enabled: 1
+    path: Assets/Mapbox/Examples/0_PrefabScenes/Location-basedGame.unity
+    guid: 42f6aa7ce7a604f16ade319663f46ceb
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 0ac917fd078a4ba4dbe6cb71b0103e9f, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 01e7cde98dbd849459bd13d228438eaf, type: 2}
