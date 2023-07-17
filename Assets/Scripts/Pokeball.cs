@@ -1,23 +1,119 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using TMPro;
 using System.Collections;
+using System.Net;
+using System.IO;
+using System.Text;
  
 //If you're using please put my name in the credit, or link my Youtube page. :)
  
 public class Pokeball : MonoBehaviour {
+    public string url = "http://172.10.5.110:80/map/show";
+    string petId = "64b13dc39a0458cf3b1e8cfb";
+    string locationId = "64b1396929beab0a894b8974";
+    
     [SerializeField]
     private float throwSpeed = 150f;
     private float speed;
     private float lastMouseX, lastMouseY;
     public Camera cam;
+    public GameObject panel; // Assign your Panel object in the inspector
  
     private bool thrown, holding;
  
     private Rigidbody _rigidbody;
     private Vector3 newPosition;
+    public GameObject toastObject; // Assign your Toast UI object in the inspector
+    public TextMeshProUGUI captureText; // Assign the Text component of the Toast object
+    public TextMeshProUGUI petname;
+    public TextMeshProUGUI petrank;
+    public TextMeshProUGUI hungry;
+    public TextMeshProUGUI energy;
+    public TextMeshProUGUI happy;
+    public TextMeshProUGUI clean;
+    public TextMeshProUGUI locationText;
+
+    // This function shows a toast message
+    public void ShowToast(string message, int duration)
+    {
+        captureText.text = message;
+        toastObject.SetActive(true);
+        StartCoroutine(DisableToastAfterTime(duration));
+    }
+
+    public void ShowPanel()
+    {
+        PostRequest(url);
+        panel.SetActive(true);
+    }
+
+    void PostRequest(string url)
+    {
+        // Create the body data
+        WildPet newWildPet = new WildPet {
+            petId = petId,
+            locationId = locationId
+        };
+        
+        string str = JsonUtility.ToJson(newWildPet);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        request.Method = "POST";
+        request.ContentType = "application/json";
+        request.ContentLength = bytes.Length;
+
+        using(var stream = request.GetRequestStream()) {
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Flush();
+            stream.Close();
+        }
+
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        StreamReader reader = new StreamReader(response.GetResponseStream());
+        string json = reader.ReadToEnd();
+        Debug.Log(json);
+
+        var getdata = JsonUtility.FromJson<Response>(json);
+        petname.text = getdata.pet.name;
+        petrank.text = getdata.pet.rank.ToString();
+        if (getdata.pet.rank == 1) {
+            hungry.text = "배고픔: 70";
+            energy.text = "활력: 70";
+            happy.text = "행복도: 70";
+            clean.text = "청결도: 70";
+        } else if (getdata.pet.rank == 2) {
+            hungry.text = "배고픔: 60";
+            energy.text = "활력: 60";
+            happy.text = "행복도: 60";
+            clean.text = "청결도: 60";
+        } else if(getdata.pet.rank == 3) {
+            hungry.text = "배고픔: 50";
+            energy.text = "활력: 50";
+            happy.text = "행복도: 50";
+            clean.text = "청결도: 50";
+        }
+        locationText.text = getdata.location.location + "에서 잡았습니다!";
+    }
+
+    public void HidePanel()
+    {
+        panel.SetActive(false);
+    }
+
+    IEnumerator DisableToastAfterTime(int time)
+    {
+        yield return new WaitForSeconds(time);
+        toastObject.SetActive(false);
+    }
  
     void Start() {
         _rigidbody = GetComponent<Rigidbody> ();
         Reset ();
+        HidePanel();
+        toastObject.SetActive(false);  // 비활성화 코드 추가
     }
  
     void Update() {
@@ -47,36 +143,6 @@ public class Pokeball : MonoBehaviour {
                 ProcessTouch(Input.mousePosition, TouchPhase.Moved);
             }
         }
-        // if (holding)
-        //     OnTouch ();
- 
-        // if (thrown)
-        //     return;
- 
-        // if(Input.touchCount == 1) {
-        //     Touch touch = Input.GetTouch(0);
-            
-        //     if (touch.phase == TouchPhase.Began) {
-        //         Ray ray = cam.ScreenPointToRay (touch.position);
-        //         RaycastHit hit;
-    
-        //         if (Physics.Raycast (ray, out hit, 100f)) {
-        //             if (hit.transform == transform) {
-        //                 holding = true;
-        //                 transform.SetParent (null);
-        //             }
-        //         }
-        //     } else if (touch.phase == TouchPhase.Ended && holding) {
-        //         if (lastMouseY < touch.position.y) {
-        //             ThrowBall (touch.position);
-        //         }
-        //         holding = false;
-        //         thrown = true;
-        //     }
-
-        //     lastMouseX = touch.position.x;
-        //     lastMouseY = touch.position.y;
-        // }
     }
  
     public void Reset(){
@@ -109,12 +175,6 @@ public class Pokeball : MonoBehaviour {
         newPosition = cam.ScreenToWorldPoint (position);
 
         transform.localPosition = Vector3.Lerp (transform.localPosition, newPosition, 50f * Time.deltaTime);
-        // Vector3 mousePos = Input.GetTouch (0).position;
-        // mousePos.z = cam.nearClipPlane * 7.5f;
- 
-        // newPosition = cam.ScreenToWorldPoint (mousePos);
- 
-        // transform.localPosition = Vector3.Lerp (transform.localPosition, newPosition, 50f * Time.deltaTime);
     }
 
     void ProcessTouch(Vector2 position, TouchPhase phase) {
@@ -146,8 +206,6 @@ public class Pokeball : MonoBehaviour {
         float differenceY = (mousePos.y - lastMouseY) / Screen.height * 100;
         speed = throwSpeed * Mathf.Sqrt(differenceY / Screen.height) * 120;
  
-        // float x = (mousePos.x / Screen.width) - (lastMouseX / Screen.width);
-        // x = Mathf.Abs (Input.GetTouch (0).position.x - lastMouseX) / Screen.width * 100 * x;
         float x = (mousePos.x / Screen.width) - (lastMouseX / Screen.width);
 
         // Check if it is touch device or not
@@ -182,7 +240,9 @@ public class Pokeball : MonoBehaviour {
     }
 
     IEnumerator CatchingPhase(float chance, GameObject pet) {
-        bool caught = (Random.Range (0, 1) < chance);
+        // bool caught = (Random.Range (0f, 1f) < chance);
+        // bool caught = false;
+        bool caught = true;
 
         pet.SetActive (false);
 
@@ -195,11 +255,49 @@ public class Pokeball : MonoBehaviour {
         _rigidbody.isKinematic = false;
         yield return new WaitForSeconds (1f);
         if (caught) {
-            Debug.Log (pet + " has been captured!");
+            ShowToast(pet.name + " has been captured!", 3);
+            Debug.Log (pet.name + " has been captured!");
+            ShowPanel();
+            this.gameObject.SetActive(false);
         } else {
-            Debug.Log (pet + " has escaped!");
+            Reset();
+            ShowToast(pet.name + " has escaped!", 3);
+            Debug.Log (pet.name + " has escaped!");
+            pet.SetActive (true);
         }
         // pet.SetActive (true);
         yield break;
     }
+    
+}
+
+[System.Serializable]
+public class Response
+{
+    public Pet pet;
+    public Location location;
+}
+
+[System.Serializable]
+public class Location
+{
+    public string longitude;
+    public string latitude;
+    public string location;
+}
+
+[System.Serializable]
+public class Pet
+{
+    public string name;
+	public int rank;
+    public string[] habitat;
+    public int[] probability;
+}
+
+[System.Serializable]
+public class WildPet
+{
+    public string petId;
+    public string locationId;
 }
