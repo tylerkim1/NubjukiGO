@@ -80,7 +80,7 @@ public class GetMyPet : MonoBehaviour
                 GameObject gameObject = gameObjects[i];
                 gameObject.SetActive(true);
                 gameObject.transform.Find("Top").Find("PetName").gameObject.GetComponent<TMP_Text>().text = item.name;
-                gameObject.transform.Find("Top").Find("Rank").gameObject.GetComponent<TMP_Text>().text = getRank(item.rank);
+                gameObject.transform.Find("Top").Find("Rank").gameObject.GetComponent<TMP_Text>().text = GetRank(item.rank);
                 gameObject.transform.Find("Middle").Find("Hungry").Find("Text").gameObject.GetComponent<TMP_Text>().text = "¹è°íÇÄ (" + item.hungry + "%)";
                 gameObject.transform.Find("Middle").Find("Hungry").Find("Slider").gameObject.GetComponent<Slider>().value = item.hungry / 100F;
                 gameObject.transform.Find("Middle").Find("Energy").Find("Text").gameObject.GetComponent<TMP_Text>().text = "È°·Â (" + item.sleep + "%)";
@@ -91,7 +91,6 @@ public class GetMyPet : MonoBehaviour
                 gameObject.transform.Find("Bottom").Find("Clean").Find("Slider").gameObject.GetComponent<Slider>().value = item.clean / 100F;
                 noGameObjects[i].SetActive(false);
             }
-            Toast.Show(json);
         }
         catch(Exception e)
         {
@@ -100,7 +99,7 @@ public class GetMyPet : MonoBehaviour
 
     }
 
-    string getRank(int rank)
+    string GetRank(int rank)
     {
         if (rank == 1)
         {
