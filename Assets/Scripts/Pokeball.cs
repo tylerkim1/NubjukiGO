@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 using System.Collections;
+using System.Text;
 using System.Net;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
  
 public class Pokeball : MonoBehaviour {
@@ -42,58 +42,29 @@ public class Pokeball : MonoBehaviour {
 
     public void ShowPanel()
     {
-        PostRequest(TempWildPet.wildPetShowURL);
-        panel.SetActive(true);
-    }
-
-    public void PostRequest(string url)
-    {
-        // Create the body data
-        WildPet newWildPet = new WildPet {
-            petId = TempWildPet.petId,
-            locationId = TempWildPet.locationId
-        };
-        
-        string str = JsonUtility.ToJson(newWildPet);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
-
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-        request.Method = "POST";
-        request.ContentType = "application/json";
-        request.ContentLength = bytes.Length;
-
-        using(var stream = request.GetRequestStream()) {
-            stream.Write(bytes, 0, bytes.Length);
-            stream.Flush();
-            stream.Close();
-        }
-
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        StreamReader reader = new StreamReader(response.GetResponseStream());
-        string json = reader.ReadToEnd();
-
-        var getdata = JsonUtility.FromJson<Response>(json);
-        petname.text = getdata.pet.name;
-        StartCoroutine(GetTexture(img, getdata.pet.rank));
-        petrank.text = getdata.pet.rank.ToString();
-        petrank.text = "희귀도. " + getRank(getdata.pet.rank);
-        if (getdata.pet.rank == 1) {
+        WildPetInfo.GetData();
+        petname.text = WildPetInfo.getdata.pet.name;
+        StartCoroutine(GetTexture(img, WildPetInfo.getdata.pet.rank));
+        petrank.text = WildPetInfo.getdata.pet.rank.ToString();
+        petrank.text = "희귀도. " + getRank(WildPetInfo.getdata.pet.rank);
+        if (WildPetInfo.getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
             energy.text = "활력: 70";
             happy.text = "행복도: 70";
             clean.text = "청결도: 70";
-        } else if (getdata.pet.rank == 2) {
+        } else if (WildPetInfo.getdata.pet.rank == 2) {
             hungry.text = "배고픔: 60";
             energy.text = "활력: 60";
             happy.text = "행복도: 60";
             clean.text = "청결도: 60";
-        } else if(getdata.pet.rank == 3) {
+        } else if(WildPetInfo.getdata.pet.rank == 3) {
             hungry.text = "배고픔: 50";
             energy.text = "활력: 50";
             happy.text = "행복도: 50";
             clean.text = "청결도: 50";
         }
-        locationText.text = getdata.location.location + "에서 잡았습니다!";
+        locationText.text = WildPetInfo.getdata.location.location + "에서 잡았습니다!";
+        panel.SetActive(true);
     }
 
     IEnumerator GetTexture(RawImage img, int rank)
@@ -131,18 +102,9 @@ public class Pokeball : MonoBehaviour {
 
     private string getRank(int rank)
     {
-        if (rank == 1)
-        {
-            return "common";
-        }
-        else if (rank == 2)
-        {
-            return "rare";
-        }
-        else
-        {
-            return "epic";
-        }
+        if (rank == 1) return "common";
+        else if (rank == 2) return "rare";
+        else return "epic";
     }
 
     public void HidePanel()
@@ -158,7 +120,6 @@ public class Pokeball : MonoBehaviour {
  
     void Start() {
         _rigidbody = GetComponent<Rigidbody> ();
-        Debug.Log(TempWildPet.wildPetShowURL);
         Reset ();
         HidePanel();
         toastObject.SetActive(false);  // 비활성화 코드 추가
@@ -210,7 +171,6 @@ public class Pokeball : MonoBehaviour {
     void OnTouch() {
         Vector3 position;
 
-        // Detect if it is touch or mouse click
         bool isTouchDevice = Input.touchCount > 0;
 
         if (isTouchDevice) {
@@ -288,10 +248,9 @@ public class Pokeball : MonoBehaviour {
     }
 
     IEnumerator CatchingPhase(float chance, GameObject pet) {
-        // bool caught = (Random.Range (0f, 1f) < chance);
+        bool caught = (Random.Range (0f, 1f) < chance);
         // bool caught = false;
-        Debug.Log(pet);
-        bool caught = true;
+        // bool caught = true;
 
         pet.SetActive (false);
 
@@ -304,17 +263,17 @@ public class Pokeball : MonoBehaviour {
         _rigidbody.isKinematic = false;
         yield return new WaitForSeconds (1f);
         if (caught) {
-            ShowToast(pet.name + " has been captured!", 3);
+            ShowToast(pet.name + "\n를 잡았습니다!", 3);
+            yield return new WaitForSeconds (1f);
             Debug.Log (pet.name + " has been captured!");
             ShowPanel();
             this.gameObject.SetActive(false);
         } else {
             Reset();
-            ShowToast(pet.name + " has escaped!", 3);
+            ShowToast(pet.name + "\n가 탈출했습니다!", 3);
             Debug.Log (pet.name + " has escaped!");
             pet.SetActive (true);
         }
-        // pet.SetActive (true);
         yield break;
     }
     

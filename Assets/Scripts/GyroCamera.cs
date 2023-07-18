@@ -11,6 +11,8 @@ public class GyroCamera : MonoBehaviour
     private Gyroscope gyro;
     private bool gyroSupported;
     private Quaternion rotFix;
+    private Quaternion initialOrientation;
+    private bool initialOrientationSet = false;
 
     [SerializeField]
     private Transform worldObj;
@@ -34,47 +36,24 @@ public class GyroCamera : MonoBehaviour
             gyro = Input.gyro;
             gyro.enabled = true;
 
-            camParent.transform.rotation = Quaternion.Euler(90f, 180f, 0f);
+            camParent.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             rotFix = new Quaternion (0, 0, 1, 0);
         }
     }
 
     void SetPetToShown() {
-        WildPet newWildPet = new WildPet {
-            petId = TempWildPet.petId,
-            locationId = TempWildPet.locationId
-        };
-        string str = JsonUtility.ToJson(newWildPet);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
-
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TempWildPet.wildPetShowURL);
-        request.Method = "POST";
-        request.ContentType = "application/json";
-        request.ContentLength = bytes.Length;
-
-        using(var stream = request.GetRequestStream()) {
-            stream.Write(bytes, 0, bytes.Length);
-            stream.Flush();
-            stream.Close();
-        }
-
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        StreamReader reader = new StreamReader(response.GetResponseStream());
-        string json = reader.ReadToEnd();
-
-        var getdata = JsonUtility.FromJson<Response>(json);
-        Debug.Log(getdata);
+        WildPetInfo.GetData();
 
         zoomObj = new GameObject[3];
         zoomObj[0] = GameObject.Find("Nupzuki");  
         zoomObj[1] = GameObject.Find("Nupzuki2");
         zoomObj[2] = GameObject.Find("Nupzuki3");
         int curInt = 0;
-        if (getdata.pet.name == "새내기 넙죽이") {
+        if (WildPetInfo.getdata.pet.name == "새내기 넙죽이") {
             curInt = 0;
-        } else if (getdata.pet.name == "화석 넙죽이") {
+        } else if (WildPetInfo.getdata.pet.name == "화석 넙죽이") {
             curInt = 1;
-        } else if(getdata.pet.name == "교수 넙죽이") {
+        } else if(WildPetInfo.getdata.pet.name == "교수 넙죽이") {
             curInt = 2;
         }
         // Let's assume we have three objects, we initialize them here
