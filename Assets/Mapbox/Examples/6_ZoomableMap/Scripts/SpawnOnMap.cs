@@ -21,20 +21,28 @@
 		float _spawnScale = 100f;
 
 		[SerializeField]
-		GameObject _markerPrefab;
+		public GameObject _markerPrefab;
 
 		List<GameObject> _spawnedObjects;
 
 		void Start()
 		{
-			_locations = new Vector2d[_locationStrings.Length];
-			_spawnedObjects = new List<GameObject>();
-			for (int i = 0; i < _locationStrings.Length; i++)
+			//_locations = new Vector2d[_locationStrings.Length];
+			_locations = new Vector2d[]
 			{
-				var locationString = _locationStrings[i];
-				_locations[i] = Conversions.StringToLatLon(locationString);
+				new Vector2d(36.373888, 127.356779), // 샌프란시스코의 위도와 경도
+                new Vector2d(36.37403, 127.3654),
+			};
+			_spawnedObjects = new List<GameObject>();
+			for (int i = 0; i < _locations.Length; i++)  // Use _locations.Length instead of _locationStrings.Length
+			{
+				var location = _locations[i];
 				var instance = Instantiate(_markerPrefab);
-				instance.transform.localPosition = _map.GeoToWorldPosition(_locations[i], true);
+				Debug.Log("instanceLog!!" + instance);
+				instance.GetComponent<EventSpawner>().eventID = i + 1;
+				instance.GetComponent<EventSpawner>().eventPos = location;
+				Debug.Log("Loc" + instance.GetComponent<EventSpawner>().eventPos);
+				instance.transform.localPosition = _map.GeoToWorldPosition(location, true);
 				instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 				_spawnedObjects.Add(instance);
 			}

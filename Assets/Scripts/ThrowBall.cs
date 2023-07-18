@@ -7,6 +7,6 @@ public class ThrowBall : MonoBehaviour
 {
     public void GoToThrowBallScene()
     {
-        SceneManager.LoadScene("ThrowBall");
+        SceneManager.LoadScene("ThrowBall_1");
     }
 }
