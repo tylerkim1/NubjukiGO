@@ -81,7 +81,7 @@ public class GetMyPet : MonoBehaviour
                 gameObject.SetActive(true);
                 gameObject.transform.Find("Top").Find("PetName").gameObject.GetComponent<TMP_Text>().text = item.name;
                 gameObject.transform.Find("Top").Find("Rank").gameObject.GetComponent<TMP_Text>().text = GetRank(item.rank);
-                gameObject.transform.Find("Middle").Find("Hungry").Find("Text").gameObject.GetComponent<TMP_Text>().text = "배고픔 (" + item.hungry + "%)";
+                gameObject.transform.Find("Middle").Find("Hungry").Find("Text").gameObject.GetComponent<TMP_Text>().text = "포만감 (" + item.hungry + "%)";
                 gameObject.transform.Find("Middle").Find("Hungry").Find("Slider").gameObject.GetComponent<Slider>().value = item.hungry / 100F;
                 gameObject.transform.Find("Middle").Find("Energy").Find("Text").gameObject.GetComponent<TMP_Text>().text = "활력 (" + item.sleep + "%)";
                 gameObject.transform.Find("Middle").Find("Energy").Find("Slider").gameObject.GetComponent<Slider>().value = item.sleep / 100F;
