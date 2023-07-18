@@ -21,6 +21,9 @@ public class GyroCamera : MonoBehaviour
     [SerializeField]
     private GameObject[] zoomObj;
     private GameObject currentZoomObj;
+    
+    float rotationSpeed = 90;
+    Vector3 currentEulerAngles;
 
     // Start is called before the first frame update
     void Start() {
@@ -29,8 +32,8 @@ public class GyroCamera : MonoBehaviour
         GameObject camParent = new GameObject ("camParent");
         camParent.transform.position = transform.position;
         transform.parent = camParent.transform;
-        ResetGyroRotation();
         SetPetToShown();
+        ResetGyroRotation();
 
         if (gyroSupported) {
             gyro = Input.gyro;
@@ -38,6 +41,9 @@ public class GyroCamera : MonoBehaviour
 
             camParent.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             rotFix = new Quaternion (0, 0, 1, 0);
+        } else {
+            // 카메라가 특정 방향을 바라보도록 설정합니다.
+            transform.localRotation = Quaternion.Euler(0f, 0f, 0f);  // 이 각도를 적당히 조절하세요.
         }
     }
 
@@ -67,13 +73,24 @@ public class GyroCamera : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(gyroSupported && startY == 0) {
-            ResetGyroRotation();
-        }
-        if (gyro != null) {
-            transform.localRotation = gyro.attitude * rotFix;
-        } else {
-            Debug.Log("Gyro is null");
+        // 자이로스코프가 지원되는 경우
+        if (gyroSupported) {
+            if (startY == 0) {
+                ResetGyroRotation();
+            }
+            if (gyro != null) {
+                transform.localRotation = gyro.attitude * rotFix;
+            } else {
+                Debug.Log("Gyro is null");
+            }
+        } 
+        // 자이로스코프가 지원되지 않는 경우 (PC에서 실행하는 경우 등)
+        else {
+            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+            currentEulerAngles += new Vector3(-mouseY, mouseX, 0);
+            transform.localRotation = Quaternion.Euler(currentEulerAngles);
         }
     }
 
@@ -90,7 +107,12 @@ public class GyroCamera : MonoBehaviour
 
             float z = Vector3.Distance(Vector3.zero, hitPoint);
             // Here we choose which object to use. I used 0 as an example.
-            currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            // currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            if (currentZoomObj != null) {
+                currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            } else {
+                Debug.LogError("currentZoomObj is null.");
+            }
             // zoomObj.localPosition = new Vector3(0f, zoomObj.localPosition.y, Mathf.Clamp(z, 8.5f, 8.5f));
         }
 

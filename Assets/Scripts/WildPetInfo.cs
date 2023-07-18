@@ -8,11 +8,12 @@ public static class WildPetInfo
     public static string mainURL = "http://172.10.5.110:80/";
     public static string wildPetShowURL = mainURL + "map/show";
     // public static string petId = "64b13dce9a0458cf3b1e8cfd";
+    // public static string wildPetId = "64b4e9cc33ca7a0e8e58d928";
     public static string petId = "64b13dc39a0458cf3b1e8cfb";
-    public static string locationId = "64b13a5c29beab0a894b8980";
-    public static Response getdata;
+    public static string locationId = "64b1396929beab0a894b8974";
+    public static WildpetResponse getdata;
 
-    public static Response GetData() {
+    public static WildpetResponse GetData() {
         WildPet newWildPet = new WildPet {
             petId = WildPetInfo.petId,
             locationId = WildPetInfo.locationId
@@ -36,13 +37,13 @@ public static class WildPetInfo
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string json = reader.ReadToEnd();
 
-        getdata = JsonUtility.FromJson<Response>(json);
+        getdata = JsonUtility.FromJson<WildpetResponse>(json);
         return getdata;
     }
 }
 
 [System.Serializable]
-public class Response
+public class WildpetResponse
 {
     public Pet pet;
     public Location location;

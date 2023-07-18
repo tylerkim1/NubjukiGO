@@ -64,6 +64,7 @@ public class Pokeball : MonoBehaviour {
             clean.text = "청결도: 50";
         }
         locationText.text = WildPetInfo.getdata.location.location + "에서 잡았습니다!";
+        AddMypet.AddToMyPet(WildPetInfo.petId, WildPetInfo.locationId);
         panel.SetActive(true);
     }
 
