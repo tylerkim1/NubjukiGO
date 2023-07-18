@@ -11,6 +11,7 @@ public class GetMyPetInfo : MonoBehaviour
 {
     public TMP_Text petName;
     public TMP_Text rank;
+    public TMP_Text stateText;
     public GameObject hungry;
     public GameObject energy;
     public GameObject happy;
@@ -21,7 +22,7 @@ public class GetMyPetInfo : MonoBehaviour
     public GameObject scrollView;
     private int index = 0;
     private int totalCnt = 3;
-    private GetMyPetResponseBody body;
+    private MyPet[] myPetList;
     public GameObject backgroundPanel;
     public GameObject sleepButton;
     public GameObject walkButton;
@@ -57,6 +58,16 @@ public class GetMyPetInfo : MonoBehaviour
     {
         public MyPet[] list;
     }
+
+    [System.Serializable]
+    public class ChangeStateRequestBody
+    {
+        public string myPetId;
+        public int hungry;
+        public int sleep;
+        public int happy;
+        public int clean;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -88,8 +99,9 @@ public class GetMyPetInfo : MonoBehaviour
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
-            body = JsonUtility.FromJson<GetMyPetResponseBody>(json);
-            if (body.list.Length == 0)
+            GetMyPetResponseBody body = JsonUtility.FromJson<GetMyPetResponseBody>(json);
+            myPetList = body.list;
+            if (myPetList.Length == 0)
             {
                 petName.text = "???";
                 rank.gameObject.SetActive(false);
@@ -141,37 +153,29 @@ public class GetMyPetInfo : MonoBehaviour
     {
         petName.text = item.name;
         rank.text = GetRank(item.rank);
-        hungry.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "배고픔 (" + item.hungry + "%)";
-        hungry.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.hungry / 100F;
-        energy.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "활력 (" + item.sleep + "%)";
-        energy.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.sleep / 100F;
-        happy.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "행복도 (" + item.happy + "%)";
-        happy.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.happy / 100F;
-        clean.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "청결도 (" + item.clean + "%)";
-        clean.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.clean / 100F;
+        UpdateStateUI(item);
     }
 
     public void ClickNextButton()
     {
         index = (index + 1) % totalCnt;
-        ChangePetInfo(body.list[index]);
+        ChangePetInfo(myPetList[index]);
     }
     public void ClickPrevButton()
     {
         index = (index - 1 + totalCnt) % totalCnt;
-        ChangePetInfo(body.list[index]);
+        ChangePetInfo(myPetList[index]);
     }
 
     public async void Feed()
     {
         backgroundPanel.GetComponent<Image>().sprite = feedBackground;
-        feedButton.transform.Find("Text").GetComponent<TMP_Text>().text = "밥먹는 중";
+        stateText.text = "밥먹는 중";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
-        backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
-        backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
-        feedButton.transform.Find("Text").GetComponent<TMP_Text>().text = "밥먹기";
+        stateText.text = "";
+        ChangeState(20, 0, 10, -5);
         EnabledAllButtons();
     }
 
@@ -180,13 +184,14 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = bedroomBackground;
         backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.white;
         backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
-        sleepButton.transform.Find("Text").GetComponent<TMP_Text>().text = "잠자는 중";
+        stateText.text = "잠자는 중";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
         backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
         backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
-        sleepButton.transform.Find("Text").GetComponent<TMP_Text>().text = "잠자기";
+        stateText.text = "";
+        ChangeState(-5, 40, 0, -5);
         EnabledAllButtons();
     }
 
@@ -195,26 +200,26 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = walkBackground;
         // backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.white;
         // backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
-        walkButton.transform.Find("Text").GetComponent<TMP_Text>().text = "산책 중";
+        stateText.text = "산책 중";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
-        backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
-        backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
-        walkButton.transform.Find("Text").GetComponent<TMP_Text>().text = "산책하기";
+        //backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
+        //backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
+        stateText.text = "";
+        ChangeState(-10, 0, 20, -10);
         EnabledAllButtons();
     }
 
     public async void Shower()
     {
         backgroundPanel.GetComponent<Image>().sprite = showerBackground;
-        showerButton.transform.Find("Text").GetComponent<TMP_Text>().text = "목욕 중";
+        stateText.text = "목욕 중";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
-        backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
-        backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
-        showerButton.transform.Find("Text").GetComponent<TMP_Text>().text = "목욕하기";
+        stateText.text = "";
+        ChangeState(0, 0, 5, 40);
         EnabledAllButtons();
     }
 
@@ -236,5 +241,65 @@ public class GetMyPetInfo : MonoBehaviour
         showerButton.GetComponent<Button>().enabled = true;
         prevButton.GetComponent<Button>().enabled = true;
         nextButton.GetComponent<Button>().enabled = true;
+    }
+
+    private void UpdateStateUI(MyPet item)
+    {
+        hungry.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "포만감 (" + item.hungry + "%)";
+        hungry.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.hungry / 100F;
+        energy.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "활력 (" + item.sleep + "%)";
+        energy.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.sleep / 100F;
+        happy.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "행복도 (" + item.happy + "%)";
+        happy.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.happy / 100F;
+        clean.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "청결도 (" + item.clean + "%)";
+        clean.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.clean / 100F;
+    }
+
+    private void ChangeState(int hungry, int sleep, int happy, int clean)
+    {
+        int finalHungry = myPetList[index].hungry + hungry;
+        int finalSleep = myPetList[index].sleep + sleep;
+        int finalHappy = myPetList[index].happy + happy;
+        int finalClean = myPetList[index].clean + clean;
+        ChangeStateRequestBody data = new ChangeStateRequestBody
+        {
+            myPetId = myPetList[index]._id,
+            hungry = finalHungry < 0 ? 0 : finalHungry > 100 ? 100 : finalHungry,
+            sleep = finalSleep < 0 ? 0 : finalSleep > 100 ? 100 : finalSleep,
+            happy = finalHappy < 0 ? 0 : finalHappy > 100 ? 100 : finalHappy,
+            clean = finalClean < 0 ? 0 : finalClean > 100 ? 100 : finalClean
+        };
+        string url = "http://172.10.5.110/grow/changestate";
+        string str = JsonUtility.ToJson(data);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.ContentLength = bytes.Length;
+
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
+                stream.Close();
+            }
+
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            string json = reader.ReadToEnd();
+            MyPet body = JsonUtility.FromJson<MyPet>(json);
+            myPetList[index].hungry = body.hungry;
+            myPetList[index].clean = body.clean;
+            myPetList[index].sleep = body.sleep;
+            myPetList[index].happy = body.happy;
+            UpdateStateUI(myPetList[index]);
+        }
+        catch (Exception e)
+        {
+            Toast.Show(e.ToString());
+        }
     }
 }
