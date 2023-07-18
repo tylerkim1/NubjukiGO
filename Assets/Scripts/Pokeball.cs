@@ -6,6 +6,7 @@ using System.Collections;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
  
 //If you're using please put my name in the credit, or link my Youtube page. :)
  
@@ -28,6 +29,7 @@ public class Pokeball : MonoBehaviour {
     public GameObject toastObject; // Assign your Toast UI object in the inspector
     public TextMeshProUGUI captureText; // Assign the Text component of the Toast object
     public TextMeshProUGUI petname;
+    public RawImage img;
     public TextMeshProUGUI petrank;
     public TextMeshProUGUI hungry;
     public TextMeshProUGUI energy;
@@ -74,10 +76,10 @@ public class Pokeball : MonoBehaviour {
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string json = reader.ReadToEnd();
-        Debug.Log(json);
 
         var getdata = JsonUtility.FromJson<Response>(json);
         petname.text = getdata.pet.name;
+        StartCoroutine(GetTexture(img, getdata.pet.rank));
         petrank.text = getdata.pet.rank.ToString();
         if (getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
@@ -96,6 +98,31 @@ public class Pokeball : MonoBehaviour {
             clean.text = "청결도: 50";
         }
         locationText.text = getdata.location.location + "에서 잡았습니다!";
+    }
+
+    IEnumerator GetTexture(RawImage img, int rank)
+    {
+        var imgUrl = "https://imgur.com/d9rMHfO.png";
+        if (rank == 1) {
+            imgUrl = "https://imgur.com/YfygwQt.png";
+        } else if (rank == 2) {
+            imgUrl = "https://imgur.com/Ihmm87C.png";
+        } else if(rank == 3) {
+            imgUrl = "https://imgur.com/nzGQvWG.png";
+        }
+        using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(imgUrl))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                img.texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            }
+        }
     }
 
     public void HidePanel()
