@@ -6,18 +6,14 @@ using System.Collections;
 using System.Net;
 using System.IO;
 using System.Text;
- 
-//If you're using please put my name in the credit, or link my Youtube page. :)
+using System.Threading.Tasks;
  
 public class Pokeball : MonoBehaviour {
-    public string url = "http://172.10.5.110:80/map/show";
-    string petId = "64b13dc39a0458cf3b1e8cfb";
-    string locationId = "64b1396929beab0a894b8974";
-    
     [SerializeField]
     private float throwSpeed = 150f;
     private float speed;
     private float lastMouseX, lastMouseY;
+
     public Camera cam;
     public GameObject panel; // Assign your Panel object in the inspector
  
@@ -28,6 +24,7 @@ public class Pokeball : MonoBehaviour {
     public GameObject toastObject; // Assign your Toast UI object in the inspector
     public TextMeshProUGUI captureText; // Assign the Text component of the Toast object
     public TextMeshProUGUI petname;
+    public RawImage img;
     public TextMeshProUGUI petrank;
     public TextMeshProUGUI hungry;
     public TextMeshProUGUI energy;
@@ -45,16 +42,16 @@ public class Pokeball : MonoBehaviour {
 
     public void ShowPanel()
     {
-        PostRequest(url);
+        PostRequest(TempWildPet.wildPetShowURL);
         panel.SetActive(true);
     }
 
-    void PostRequest(string url)
+    public void PostRequest(string url)
     {
         // Create the body data
         WildPet newWildPet = new WildPet {
-            petId = petId,
-            locationId = locationId
+            petId = TempWildPet.petId,
+            locationId = TempWildPet.locationId
         };
         
         string str = JsonUtility.ToJson(newWildPet);
@@ -74,11 +71,12 @@ public class Pokeball : MonoBehaviour {
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string json = reader.ReadToEnd();
-        Debug.Log(json);
 
         var getdata = JsonUtility.FromJson<Response>(json);
         petname.text = getdata.pet.name;
+        StartCoroutine(GetTexture(img, getdata.pet.rank));
         petrank.text = getdata.pet.rank.ToString();
+        petrank.text = "희귀도. " + getRank(getdata.pet.rank);
         if (getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
             energy.text = "활력: 70";
@@ -98,6 +96,55 @@ public class Pokeball : MonoBehaviour {
         locationText.text = getdata.location.location + "에서 잡았습니다!";
     }
 
+    IEnumerator GetTexture(RawImage img, int rank)
+    {
+        string imgUrl = "https://imgur.com/d9rMHfO.png";
+        if (rank == 1) {
+            imgUrl = "https://imgur.com/YfygwQt.png";
+        } else if (rank == 2) {
+            imgUrl = "https://imgur.com/Ihmm87C.png";
+        } else if(rank == 3) {
+            imgUrl = "https://imgur.com/nzGQvWG.png";
+        }
+
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(imgUrl);
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+        Stream responseStream = response.GetResponseStream();
+        byte[] buffer = new byte[16 * 1024];
+        using (MemoryStream ms = new MemoryStream())
+        {
+            int read;
+            while ((read = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                ms.Write(buffer, 0, read);
+            }
+            byte[] imageBytes = ms.ToArray();
+
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(imageBytes);
+
+            img.texture = texture;
+        }
+        yield return null;
+    }
+
+    private string getRank(int rank)
+    {
+        if (rank == 1)
+        {
+            return "common";
+        }
+        else if (rank == 2)
+        {
+            return "rare";
+        }
+        else
+        {
+            return "epic";
+        }
+    }
+
     public void HidePanel()
     {
         panel.SetActive(false);
@@ -111,6 +158,7 @@ public class Pokeball : MonoBehaviour {
  
     void Start() {
         _rigidbody = GetComponent<Rigidbody> ();
+        Debug.Log(TempWildPet.wildPetShowURL);
         Reset ();
         HidePanel();
         toastObject.SetActive(false);  // 비활성화 코드 추가
@@ -242,6 +290,7 @@ public class Pokeball : MonoBehaviour {
     IEnumerator CatchingPhase(float chance, GameObject pet) {
         // bool caught = (Random.Range (0f, 1f) < chance);
         // bool caught = false;
+        Debug.Log(pet);
         bool caught = true;
 
         pet.SetActive (false);
@@ -269,35 +318,4 @@ public class Pokeball : MonoBehaviour {
         yield break;
     }
     
-}
-
-[System.Serializable]
-public class Response
-{
-    public Pet pet;
-    public Location location;
-}
-
-[System.Serializable]
-public class Location
-{
-    public string longitude;
-    public string latitude;
-    public string location;
-}
-
-[System.Serializable]
-public class Pet
-{
-    public string name;
-	public int rank;
-    public string[] habitat;
-    public int[] probability;
-}
-
-[System.Serializable]
-public class WildPet
-{
-    public string petId;
-    public string locationId;
 }
