@@ -81,6 +81,7 @@ public class Pokeball : MonoBehaviour {
         petname.text = getdata.pet.name;
         StartCoroutine(GetTexture(img, getdata.pet.rank));
         petrank.text = getdata.pet.rank.ToString();
+        petrank.text = "Lv. " + getRank(getdata.pet.rank);
         if (getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
             energy.text = "활력: 70";
@@ -122,6 +123,19 @@ public class Pokeball : MonoBehaviour {
             {
                 img.texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
             }
+    private string getRank(int rank)
+    {
+        if (rank == 1)
+        {
+            return "학사";
+        }
+        else if (rank == 2)
+        {
+            return "석사";
+        }
+        else
+        {
+            return "박사";
         }
     }
 
