@@ -8,17 +8,12 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
  
-//If you're using please put my name in the credit, or link my Youtube page. :)
- 
 public class Pokeball : MonoBehaviour {
-    public string url = "http://172.10.5.110:80/map/show";
-    string petId = "64b13dc39a0458cf3b1e8cfb";
-    string locationId = "64b1396929beab0a894b8974";
-    
     [SerializeField]
     private float throwSpeed = 150f;
     private float speed;
     private float lastMouseX, lastMouseY;
+
     public Camera cam;
     public GameObject panel; // Assign your Panel object in the inspector
  
@@ -47,16 +42,16 @@ public class Pokeball : MonoBehaviour {
 
     public void ShowPanel()
     {
-        PostRequest(url);
+        PostRequest(TempWildPet.wildPetShowURL);
         panel.SetActive(true);
     }
 
-    void PostRequest(string url)
+    public void PostRequest(string url)
     {
         // Create the body data
         WildPet newWildPet = new WildPet {
-            petId = petId,
-            locationId = locationId
+            petId = TempWildPet.petId,
+            locationId = TempWildPet.locationId
         };
         
         string str = JsonUtility.ToJson(newWildPet);
@@ -163,6 +158,7 @@ public class Pokeball : MonoBehaviour {
  
     void Start() {
         _rigidbody = GetComponent<Rigidbody> ();
+        Debug.Log(TempWildPet.wildPetShowURL);
         Reset ();
         HidePanel();
         toastObject.SetActive(false);  // 비활성화 코드 추가
@@ -322,35 +318,4 @@ public class Pokeball : MonoBehaviour {
         yield break;
     }
     
-}
-
-[System.Serializable]
-public class Response
-{
-    public Pet pet;
-    public Location location;
-}
-
-[System.Serializable]
-public class Location
-{
-    public string longitude;
-    public string latitude;
-    public string location;
-}
-
-[System.Serializable]
-public class Pet
-{
-    public string name;
-	public int rank;
-    public string[] habitat;
-    public int[] probability;
-}
-
-[System.Serializable]
-public class WildPet
-{
-    public string petId;
-    public string locationId;
 }

@@ -8,9 +8,6 @@ using UnityEngine.Networking;
 
 public class GyroCamera : MonoBehaviour
 {
-    public string url = "http://172.10.5.110:80/map/show";
-    string petId = "64b13dce9a0458cf3b1e8cfd";
-    string locationId = "64b13a5c29beab0a894b8980";
     private Gyroscope gyro;
     private bool gyroSupported;
     private Quaternion rotFix;
@@ -30,6 +27,7 @@ public class GyroCamera : MonoBehaviour
         GameObject camParent = new GameObject ("camParent");
         camParent.transform.position = transform.position;
         transform.parent = camParent.transform;
+        ResetGyroRotation();
         SetPetToShown();
 
         if (gyroSupported) {
@@ -43,13 +41,13 @@ public class GyroCamera : MonoBehaviour
 
     void SetPetToShown() {
         WildPet newWildPet = new WildPet {
-            petId = petId,
-            locationId = locationId
+            petId = TempWildPet.petId,
+            locationId = TempWildPet.locationId
         };
         string str = JsonUtility.ToJson(newWildPet);
         var bytes = System.Text.Encoding.UTF8.GetBytes(str);
 
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TempWildPet.wildPetShowURL);
         request.Method = "POST";
         request.ContentType = "application/json";
         request.ContentLength = bytes.Length;
@@ -113,7 +111,7 @@ public class GyroCamera : MonoBehaviour
 
             float z = Vector3.Distance(Vector3.zero, hitPoint);
             // Here we choose which object to use. I used 0 as an example.
-            currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 8.5f, 8.5f));
+            currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
             // zoomObj.localPosition = new Vector3(0f, zoomObj.localPosition.y, Mathf.Clamp(z, 8.5f, 8.5f));
         }
 
