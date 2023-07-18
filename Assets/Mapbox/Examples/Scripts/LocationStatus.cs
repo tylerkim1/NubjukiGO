@@ -14,6 +14,7 @@
 		Text _statusText;
 
 		private AbstractLocationProvider _locationProvider = null;
+		Location currLoc;
 		void Start()
 		{
 			if (null == _locationProvider)
@@ -25,7 +26,7 @@
 
 		void Update()
 		{
-			Location currLoc = _locationProvider.CurrentLocation;
+			currLoc = _locationProvider.CurrentLocation;
 
 			if (currLoc.IsLocationServiceInitializing)
 			{
@@ -50,6 +51,14 @@
 				}
 			}
 
+		}
+		public double GetLocationLat()
+        {
+			return currLoc.LatitudeLongitude.x;
+        }
+		public double GetLocationLong()
+		{
+			return currLoc.LatitudeLongitude.y;
 		}
 	}
 }
