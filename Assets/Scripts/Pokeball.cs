@@ -81,7 +81,7 @@ public class Pokeball : MonoBehaviour {
         petname.text = getdata.pet.name;
         StartCoroutine(GetTexture(img, getdata.pet.rank));
         petrank.text = getdata.pet.rank.ToString();
-        petrank.text = "Lv. " + getRank(getdata.pet.rank);
+        petrank.text = "희귀도. " + getRank(getdata.pet.rank);
         if (getdata.pet.rank == 1) {
             hungry.text = "배고픔: 70";
             energy.text = "활력: 70";
@@ -103,7 +103,7 @@ public class Pokeball : MonoBehaviour {
 
     IEnumerator GetTexture(RawImage img, int rank)
     {
-        var imgUrl = "https://imgur.com/d9rMHfO.png";
+        string imgUrl = "https://imgur.com/d9rMHfO.png";
         if (rank == 1) {
             imgUrl = "https://imgur.com/YfygwQt.png";
         } else if (rank == 2) {
@@ -111,31 +111,42 @@ public class Pokeball : MonoBehaviour {
         } else if(rank == 3) {
             imgUrl = "https://imgur.com/nzGQvWG.png";
         }
-        using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(imgUrl))
-        {
-            yield return www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(imgUrl);
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+        Stream responseStream = response.GetResponseStream();
+        byte[] buffer = new byte[16 * 1024];
+        using (MemoryStream ms = new MemoryStream())
+        {
+            int read;
+            while ((read = responseStream.Read(buffer, 0, buffer.Length)) > 0)
             {
-                Debug.Log(www.error);
+                ms.Write(buffer, 0, read);
             }
-            else
-            {
-                img.texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-            }
+            byte[] imageBytes = ms.ToArray();
+
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(imageBytes);
+
+            img.texture = texture;
+        }
+        yield return null;
+    }
+
     private string getRank(int rank)
     {
         if (rank == 1)
         {
-            return "학사";
+            return "common";
         }
         else if (rank == 2)
         {
-            return "석사";
+            return "rare";
         }
         else
         {
-            return "박사";
+            return "epic";
         }
     }
 
@@ -283,6 +294,7 @@ public class Pokeball : MonoBehaviour {
     IEnumerator CatchingPhase(float chance, GameObject pet) {
         // bool caught = (Random.Range (0f, 1f) < chance);
         // bool caught = false;
+        Debug.Log(pet);
         bool caught = true;
 
         pet.SetActive (false);
