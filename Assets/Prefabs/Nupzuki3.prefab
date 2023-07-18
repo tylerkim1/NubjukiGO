@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 3963361475280792567}
   - component: {fileID: 709073083595801794}
   m_Layer: 0
-  m_Name: Graduate Nupzuki
+  m_Name: Master Nupzuki
   m_TagString: Pet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,8 +320,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1234907441191698711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.77533, y: 1.5546, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.174}
+  m_LocalScale: {x: 0.77533, y: 1.5546, z: 0.85748434}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5850003848918522054}
@@ -1308,8 +1308,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7379583469815259324}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.20291908}
+  m_LocalScale: {x: 1, y: 1, z: 1.1662021}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6636910351076916338}
