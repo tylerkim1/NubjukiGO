@@ -12,6 +12,7 @@ public class GetMyPetInfo : MonoBehaviour
     public TMP_Text petName;
     public TMP_Text rank;
     public TMP_Text stateText;
+    public GameObject petImage;
     public GameObject hungry;
     public GameObject energy;
     public GameObject happy;
@@ -33,6 +34,8 @@ public class GetMyPetInfo : MonoBehaviour
     Sprite showerBackground;
     Sprite feedBackground;
     Sprite walkBackground;
+    Sprite rank2PetImage;
+    Sprite rank3PetImage;
 
     [System.Serializable]
     public class GetMyPetRequestBody
@@ -76,6 +79,8 @@ public class GetMyPetInfo : MonoBehaviour
         walkBackground = Resources.Load<Sprite>("walkBackground");
         showerBackground = Resources.Load<Sprite>("showerBackground");
         feedBackground = Resources.Load<Sprite>("feedBackground");
+        rank2PetImage = Resources.Load<Sprite>("rank2Nupzuki");
+        rank3PetImage = Resources.Load<Sprite>("rank3Nupzuki");
         string url = "http://172.10.5.110/grow/all";
         GetMyPetRequestBody data = new GetMyPetRequestBody();
         data.userId = UserInfo.id;
@@ -245,6 +250,14 @@ public class GetMyPetInfo : MonoBehaviour
 
     private void UpdateStateUI(MyPet item)
     {
+        if (item.rank == 2)
+        {
+            petImage.GetComponent<Image>().sprite = rank2PetImage;
+        }
+        else if (item.rank == 3)
+        {
+            petImage.GetComponent<Image>().sprite = rank3PetImage;
+        }
         hungry.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "포만감 (" + item.hungry + "%)";
         hungry.transform.Find("Slider").gameObject.GetComponent<Slider>().value = item.hungry / 100F;
         energy.transform.Find("Text").gameObject.GetComponent<TMP_Text>().text = "활력 (" + item.sleep + "%)";
@@ -290,12 +303,14 @@ public class GetMyPetInfo : MonoBehaviour
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
+            reader.Close();
             MyPet body = JsonUtility.FromJson<MyPet>(json);
             myPetList[index].hungry = body.hungry;
             myPetList[index].clean = body.clean;
             myPetList[index].sleep = body.sleep;
             myPetList[index].happy = body.happy;
             UpdateStateUI(myPetList[index]);
+            
         }
         catch (Exception e)
         {
