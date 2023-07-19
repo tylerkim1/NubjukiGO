@@ -15,10 +15,12 @@ public class EventSpawner : MonoBehaviour
     public int eventID;
 
     MenuUIManager menuUIManager;
+    EventManager eventManager;
     // Start is called before the first frame update
     void Start()
     {
         menuUIManager = GameObject.Find("Canvas").GetComponent<MenuUIManager>();
+        eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
         Debug.Log("Exist");
         Debug.Log("Is " + gameObject.name + " active?: " + gameObject.activeInHierarchy);
         Debug.Log("Does " + gameObject.name + " have a collider?: " + (GetComponent<Collider>() != null));
@@ -53,7 +55,7 @@ public class EventSpawner : MonoBehaviour
                     var eventLocation = new GeoCoordinatePortable.GeoCoordinate(eventPos[0], eventPos[1]);
                     var distance = currentPlayerLocation.GetDistanceTo(eventLocation);
                     Debug.Log("Distance is: " + distance);
-                    if (distance < 300)
+                    if (distance < 40 )
                     {
                         menuUIManager.DisplayCatchPanel(1);
                     }
