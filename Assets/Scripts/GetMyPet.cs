@@ -68,6 +68,7 @@ public class GetMyPet : MonoBehaviour
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
+            reader.Close();
             GetMyPetResponseBody body = JsonUtility.FromJson<GetMyPetResponseBody>(json);
             for (int i = 0; i < gameObjects.Length; i++)
             {
@@ -91,6 +92,7 @@ public class GetMyPet : MonoBehaviour
                 gameObject.transform.Find("Bottom").Find("Clean").Find("Slider").gameObject.GetComponent<Slider>().value = item.clean / 100F;
                 noGameObjects[i].SetActive(false);
             }
+            
         }
         catch(Exception e)
         {
