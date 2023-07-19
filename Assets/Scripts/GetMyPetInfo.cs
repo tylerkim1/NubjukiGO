@@ -138,26 +138,10 @@ public class GetMyPetInfo : MonoBehaviour
         }
     }
 
-    string GetRank(int rank)
-    {
-        if (rank == 1)
-        {
-            return "Lv. ÇÐ»ç";
-        }
-        else if (rank == 1)
-        {
-            return "Lv. ¼®»ç";
-        }
-        else
-        {
-            return "Lv. ¹Ú»ç";
-        }
-    }
-
     private void ChangePetInfo(MyPet item)
     {
         petName.text = item.name;
-        rank.text = GetRank(item.rank);
+        rank.text = "Rank. " + GetRank(item.rank);
         UpdateStateUI(item);
     }
 
@@ -175,7 +159,7 @@ public class GetMyPetInfo : MonoBehaviour
     public async void Feed()
     {
         backgroundPanel.GetComponent<Image>().sprite = feedBackground;
-        stateText.text = "¹ä¸Ô´Â Áß";
+        stateText.text = "¹ä¸Ô´Â Áß...";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
@@ -189,7 +173,7 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = bedroomBackground;
         backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.white;
         backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
-        stateText.text = "ÀáÀÚ´Â Áß";
+        stateText.text = "ÀáÀÚ´Â Áß...";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
@@ -205,7 +189,7 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = walkBackground;
         // backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.white;
         // backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
-        stateText.text = "»êÃ¥ Áß";
+        stateText.text = "»êÃ¥ Áß...";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
@@ -219,7 +203,7 @@ public class GetMyPetInfo : MonoBehaviour
     public async void Shower()
     {
         backgroundPanel.GetComponent<Image>().sprite = showerBackground;
-        stateText.text = "¸ñ¿å Áß";
+        stateText.text = "¸ñ¿å Áß...";
         DisableAllButtons();
         await Task.Delay(3000);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
@@ -315,6 +299,22 @@ public class GetMyPetInfo : MonoBehaviour
         catch (Exception e)
         {
             Toast.Show(e.ToString());
+        }
+    }
+
+    private string GetRank(int rank)
+    {
+        if (rank == 1)
+        {
+            return "common";
+        }
+        else if (rank == 2)
+        {
+            return "rare";
+        }
+        else
+        {
+            return "epic";
         }
     }
 }
