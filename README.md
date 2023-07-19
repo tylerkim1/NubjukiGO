@@ -9,10 +9,11 @@
 
 ## 기능 소개
 
-### 구글 로그인
+### 로그인
 
-<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/87f73a09-344c-476f-b1e8-95daf6765707" width="200" />
-<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/d73b5eea-b41e-4ab8-abbc-605c77547733" width="200" />
+| 구글 소셜 로그인 화면 |
+|--|
+|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/87f73a09-344c-476f-b1e8-95daf6765707" width="200" /> <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/d73b5eea-b41e-4ab8-abbc-605c77547733" width="200" />|
 
 
 - firebase, mongoDB를 이용하여 구글 소셜 로그인을 구했습니다.
@@ -47,6 +48,9 @@
 
 ### 잡은 넙죽이 목록
 
-<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/53391cc3-4652-446c-badf-4d61ad1ce165" width="200" />
+| 내가 잡은 넙죽이들 | 방출한 경우 |
+|--|--|
+|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/53391cc3-4652-446c-badf-4d61ad1ce165" width="200" />|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/4973c69b-418e-466e-8b65-afec8e855156" width="200" />|
+
 
 - 내가 잡은 넙죽이 목록을 보여주고, 방출할 수도 있어요.
