@@ -19,6 +19,6 @@ public class GotoMap : MonoBehaviour
 
     public void GoToMap()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene("Location-basedGame");
     }
 }
