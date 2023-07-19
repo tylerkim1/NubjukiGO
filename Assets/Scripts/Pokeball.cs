@@ -31,8 +31,6 @@ public class Pokeball : MonoBehaviour {
     public TextMeshProUGUI happy;
     public TextMeshProUGUI clean;
     public TextMeshProUGUI locationText;
-    
-    public AudioManager audioManager;
 
     // This function shows a toast message
     public void ShowToast(string message, int duration)
@@ -44,7 +42,6 @@ public class Pokeball : MonoBehaviour {
 
     public void ShowPanel()
     {
-        audioManager.StopBGM();
         WildPetInfo.GetData();
         petname.text = WildPetInfo.getdata.pet.name;
         StartCoroutine(GetTexture(img, WildPetInfo.getdata.pet.rank));
@@ -243,7 +240,6 @@ public class Pokeball : MonoBehaviour {
     bool missed = false;
 
     void OnCollisionEnter(Collision collision) {
-        GetComponent<AudioSource>().Play();
         if (collision.transform.tag == "Pet" && !missed) {
             GameObject pet = collision.transform.gameObject;
             StartCoroutine(CatchingPhase(0.5f, pet));
@@ -254,9 +250,6 @@ public class Pokeball : MonoBehaviour {
 
     IEnumerator CatchingPhase(float chance, GameObject pet) {
         bool caught = (Random.Range (0f, 1f) < chance);
-        // bool caught = false;
-        // bool caught = true;
-
         pet.SetActive (false);
 
         _rigidbody.AddForce(Vector3.up * 2.0f);
