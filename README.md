@@ -44,6 +44,7 @@
 | <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/6f4d9361-4b42-4d34-97ea-37822af3459c" width="200" />| <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/cdd594e2-f728-46a5-9606-d9ba4d8fa8f6" width="200" /> | <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/3765cc83-ab0d-46ee-a58d-b22d5bff5af8" width="200" /> | <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/3f1d8ca0-8604-46aa-8a68-121c20fa3f14" width="200" /> |
 
 - 공을 던지고 넙죽이를 맞쳐서 잡을 수 있어요.
+- 화면은 Unity AR을 활용해 구현했어요.
 - 잡을 수 있는 확률은 0.5이예요.
 
 ### 잡은 넙죽이 목록
