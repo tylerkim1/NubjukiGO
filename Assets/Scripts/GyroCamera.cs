@@ -11,6 +11,8 @@ public class GyroCamera : MonoBehaviour
     private Gyroscope gyro;
     private bool gyroSupported;
     private Quaternion rotFix;
+    private Quaternion initialOrientation;
+    private bool initialOrientationSet = false;
 
     [SerializeField]
     private Transform worldObj;
@@ -19,6 +21,9 @@ public class GyroCamera : MonoBehaviour
     [SerializeField]
     private GameObject[] zoomObj;
     private GameObject currentZoomObj;
+    
+    float rotationSpeed = 90;
+    Vector3 currentEulerAngles;
 
     // Start is called before the first frame update
     void Start() {
@@ -27,54 +32,34 @@ public class GyroCamera : MonoBehaviour
         GameObject camParent = new GameObject ("camParent");
         camParent.transform.position = transform.position;
         transform.parent = camParent.transform;
-        ResetGyroRotation();
         SetPetToShown();
+        ResetGyroRotation();
 
         if (gyroSupported) {
             gyro = Input.gyro;
             gyro.enabled = true;
 
-            camParent.transform.rotation = Quaternion.Euler(90f, 180f, 0f);
+            camParent.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             rotFix = new Quaternion (0, 0, 1, 0);
+        } else {
+            // 카메라가 특정 방향을 바라보도록 설정합니다.
+            transform.localRotation = Quaternion.Euler(0f, 0f, 0f);  // 이 각도를 적당히 조절하세요.
         }
     }
 
     void SetPetToShown() {
-        WildPet newWildPet = new WildPet {
-            petId = TempWildPet.petId,
-            locationId = TempWildPet.locationId
-        };
-        string str = JsonUtility.ToJson(newWildPet);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
-
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TempWildPet.wildPetShowURL);
-        request.Method = "POST";
-        request.ContentType = "application/json";
-        request.ContentLength = bytes.Length;
-
-        using(var stream = request.GetRequestStream()) {
-            stream.Write(bytes, 0, bytes.Length);
-            stream.Flush();
-            stream.Close();
-        }
-
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        StreamReader reader = new StreamReader(response.GetResponseStream());
-        string json = reader.ReadToEnd();
-
-        var getdata = JsonUtility.FromJson<Response>(json);
-        Debug.Log(getdata);
+        WildPetInfo.GetData();
 
         zoomObj = new GameObject[3];
         zoomObj[0] = GameObject.Find("Nupzuki");  
         zoomObj[1] = GameObject.Find("Nupzuki2");
         zoomObj[2] = GameObject.Find("Nupzuki3");
         int curInt = 0;
-        if (getdata.pet.name == "새내기 넙죽이") {
+        if (WildPetInfo.getdata.pet.name == "새내기 넙죽이") {
             curInt = 0;
-        } else if (getdata.pet.name == "화석 넙죽이") {
+        } else if (WildPetInfo.getdata.pet.name == "화석 넙죽이") {
             curInt = 1;
-        } else if(getdata.pet.name == "교수 넙죽이") {
+        } else if(WildPetInfo.getdata.pet.name == "교수 넙죽이") {
             curInt = 2;
         }
         // Let's assume we have three objects, we initialize them here
@@ -88,13 +73,24 @@ public class GyroCamera : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(gyroSupported && startY == 0) {
-            ResetGyroRotation();
-        }
-        if (gyro != null) {
-            transform.localRotation = gyro.attitude * rotFix;
-        } else {
-            Debug.Log("Gyro is null");
+        // 자이로스코프가 지원되는 경우
+        if (gyroSupported) {
+            if (startY == 0) {
+                ResetGyroRotation();
+            }
+            if (gyro != null) {
+                transform.localRotation = gyro.attitude * rotFix;
+            } else {
+                Debug.Log("Gyro is null");
+            }
+        } 
+        // 자이로스코프가 지원되지 않는 경우 (PC에서 실행하는 경우 등)
+        else {
+            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+            currentEulerAngles += new Vector3(-mouseY, mouseX, 0);
+            transform.localRotation = Quaternion.Euler(currentEulerAngles);
         }
     }
 
@@ -111,7 +107,12 @@ public class GyroCamera : MonoBehaviour
 
             float z = Vector3.Distance(Vector3.zero, hitPoint);
             // Here we choose which object to use. I used 0 as an example.
-            currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            // currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            if (currentZoomObj != null) {
+                currentZoomObj.transform.localPosition = new Vector3(0f, currentZoomObj.transform.localPosition.y, Mathf.Clamp(z, 0f, -2f));
+            } else {
+                Debug.LogError("currentZoomObj is null.");
+            }
             // zoomObj.localPosition = new Vector3(0f, zoomObj.localPosition.y, Mathf.Clamp(z, 8.5f, 8.5f));
         }
 
