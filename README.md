@@ -16,7 +16,7 @@
 |<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/87f73a09-344c-476f-b1e8-95daf6765707" width="200" /> <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/d73b5eea-b41e-4ab8-abbc-605c77547733" width="200" />|
 
 
-- firebase, mongoDB를 이용하여 구글 소셜 로그인을 구했습니다.
+- firebase, mongoDB를 이용하여 구글 소셜 로그인을 구현했어요.
 
 ### 홈
 
