@@ -21,11 +21,8 @@ public class EventManager : MonoBehaviour
     {
         if (eventID == 1)
         {
-            //SceneManager.LoadScene("Goldsmiths Student Union");
+            SceneManager.LoadScene("ThrowBall");
         }
-        else if (eventID == 2)
-        {
-            //SceneManager.LoadScene("Goldsmiths Student Union");
-        }
+     
     }
 }
