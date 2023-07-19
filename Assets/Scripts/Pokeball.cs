@@ -243,9 +243,12 @@ public class Pokeball : MonoBehaviour {
     bool missed = false;
 
     void OnCollisionEnter(Collision collision) {
-        GetComponent<AudioSource>().Play();
         if (collision.transform.tag == "Pet" && !missed) {
             GameObject pet = collision.transform.gameObject;
+            AudioSource petAudio = pet.GetComponent<AudioSource>();
+            if (petAudio != null) {
+                petAudio.Play();
+            }
             StartCoroutine(CatchingPhase(0.5f, pet));
         } else if (collision.transform.tag != "Pet"){
             missed = true;
