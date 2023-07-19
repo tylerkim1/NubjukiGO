@@ -32,6 +32,7 @@
 			{
 				new Vector2d(36.373888, 127.356779), // 샌프란시스코의 위도와 경도
                 new Vector2d(36.37403, 127.3654),
+				new Vector2d(36.37357500089068, 127.35956859056166)
 			};
 			_spawnedObjects = new List<GameObject>();
 			for (int i = 0; i < _locations.Length; i++)  // Use _locations.Length instead of _locationStrings.Length

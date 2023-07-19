@@ -29,7 +29,9 @@ public class MenuUIManager : MonoBehaviour
             tempEvent = eventID;
             CatchPanel.SetActive(true);
             IsCatchPanel = true;
+            ToFarPanel.SetActive(false);
         }
+        
     }
 
     public void OnJoinButtonClick()
@@ -43,6 +45,7 @@ public class MenuUIManager : MonoBehaviour
         {
             ToFarPanel.SetActive(true);
             IsToFarPanel = true;
+            CatchPanel.SetActive(false);
         }
     }
     public void CloseButtonClick()
