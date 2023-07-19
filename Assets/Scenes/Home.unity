@@ -2798,8 +2798,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -257}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000053406, y: -258.5096}
+  m_SizeDelta: {x: 622, y: 46.9806}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1101124931
 MonoBehaviour:
@@ -3995,8 +3995,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1859287839}
   m_HandleRect: {fileID: 1859287838}
   m_Direction: 2
-  m_Value: 1.0000001
-  m_Size: 0.38290247
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4242,6 +4242,7 @@ MonoBehaviour:
   petName: {fileID: 1854594749}
   rank: {fileID: 1101124931}
   stateText: {fileID: 1973584303}
+  petImage: {fileID: 2087058413}
   hungry: {fileID: 2403054}
   energy: {fileID: 905116474}
   happy: {fileID: 628393338}
@@ -4304,7 +4305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00004277632}
+  m_AnchoredPosition: {x: 0, y: 0.000018253922}
   m_SizeDelta: {x: 0, y: 653.4759}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1782943725
