@@ -32,7 +32,7 @@
 
 |내 위치와 넙죽이 위치| 거리가 40m 이상인 경우 | 거리거 40m 이내인 경우|
 |--|--|--|
-|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/2c367bcc-09bb-4a53-84fa-12f5aae9c458" width="200" />| | |
+|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/2c367bcc-09bb-4a53-84fa-12f5aae9c458" width="200" />|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/937a5558-f8ba-4587-9d55-951920efe106" width="200" />| <img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/70544868-e0c7-4f88-ac15-57941547dbd7" width="200" />|
 
 - 현위치 중심으로 지도를 보여주고 넙죽이의 위치를 알 수 있어요.
 - 넙죽이와의 거리가 40m 이내이면 잡을 수 있고, 아니라면 잡을 수 없어요.
@@ -51,6 +51,7 @@
 | 내가 잡은 넙죽이들 | 방출한 경우 |
 |--|--|
 |<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/53391cc3-4652-446c-badf-4d61ad1ce165" width="200" />|<img src="https://github.com/tylerkim1/NubjukiGO/assets/89760088/4973c69b-418e-466e-8b65-afec8e855156" width="200" />|
+
 
 
 - 내가 잡은 넙죽이 목록을 보여주고, 방출할 수도 있어요.
