@@ -206,7 +206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 83953480}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 609206761}
+        m_TargetAssemblyTypeName: GotoMaporHome, Assembly-CSharp
+        m_MethodName: GotoHome
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &83953480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,6 +866,50 @@ Transform:
   m_Father: {fileID: 1547457653}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &609206760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 609206762}
+  - component: {fileID: 609206761}
+  m_Layer: 0
+  m_Name: NavigationToHome
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &609206761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609206760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1a7eee510a355419c4aa44f03ded3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &609206762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609206760}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.027412286, y: 0.3738571, z: -1.0901917}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &636355886
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +1087,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 647053747}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 609206761}
+        m_TargetAssemblyTypeName: GotoMaporHome, Assembly-CSharp
+        m_MethodName: GotoMap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &647053747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,7 +2241,6 @@ MonoBehaviour:
   happy: {fileID: 2123015733}
   clean: {fileID: 1941748784}
   locationText: {fileID: 723900441}
-  audioManager: {fileID: 0}
 --- !u!135 &1725607176
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3095,6 +3162,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1234907441191698711, guid: 2b6cb3e650e4be045a6d297327ffe2be, type: 3}
+      propertyPath: m_Name
+      value: "\uAD50\uC218 \uB119\uC8FD\uC774"
+      objectReference: {fileID: 0}
     - target: {fileID: 7664745000184650319, guid: 2b6cb3e650e4be045a6d297327ffe2be, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -3205,6 +3276,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4487164493071274165, guid: 6758dbdbda041f949be753049d6b7926, type: 3}
+      propertyPath: m_Name
+      value: "\uD654\uC11D \uB119\uC8FD\uC774"
+      objectReference: {fileID: 0}
     - target: {fileID: 5130732637232976754, guid: 6758dbdbda041f949be753049d6b7926, type: 3}
       propertyPath: m_Name
       value: Nupzuki2
@@ -3277,7 +3352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3481538506983728939, guid: 135c7197d0cd6184583fa5b2e49c71ed, type: 3}
       propertyPath: m_Name
-      value: Nupzuki
+      value: "\uC0C8\uB0B4\uAE30 \uB119\uC8FD\uC774"
       objectReference: {fileID: 0}
     - target: {fileID: 6085926022590086452, guid: 135c7197d0cd6184583fa5b2e49c71ed, type: 3}
       propertyPath: m_Name
