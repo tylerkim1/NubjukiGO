@@ -23,6 +23,7 @@ public class GetMyPetInfo : MonoBehaviour
     public GameObject scrollView;
     private int index = 0;
     private int totalCnt = 3;
+    private int delay = 1000;
     private MyPet[] myPetList;
     public GameObject backgroundPanel;
     public GameObject sleepButton;
@@ -161,7 +162,7 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = feedBackground;
         stateText.text = "¹ä¸Ô´Â Áß...";
         DisableAllButtons();
-        await Task.Delay(3000);
+        await Task.Delay(delay);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
         stateText.text = "";
         ChangeState(20, 0, 10, -5);
@@ -175,7 +176,7 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
         stateText.text = "ÀáÀÚ´Â Áß...";
         DisableAllButtons();
-        await Task.Delay(3000);
+        await Task.Delay(delay);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
         backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
         backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
@@ -191,7 +192,7 @@ public class GetMyPetInfo : MonoBehaviour
         // backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.white;
         stateText.text = "»êÃ¥ Áß...";
         DisableAllButtons();
-        await Task.Delay(3000);
+        await Task.Delay(delay);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
         //backgroundPanel.transform.Find("PetName").GetComponent<TMP_Text>().color = Color.black;
         //backgroundPanel.transform.Find("Rank").GetComponent<TMP_Text>().color = Color.black;
@@ -205,7 +206,7 @@ public class GetMyPetInfo : MonoBehaviour
         backgroundPanel.GetComponent<Image>().sprite = showerBackground;
         stateText.text = "¸ñ¿å Áß...";
         DisableAllButtons();
-        await Task.Delay(3000);
+        await Task.Delay(delay);
         backgroundPanel.GetComponent<Image>().sprite = homeBackground;
         stateText.text = "";
         ChangeState(0, 0, 5, 40);
